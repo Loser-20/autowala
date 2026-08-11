@@ -2,77 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>My Playlist Player</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin-top: 80px;
-      background: #f9f9f9;
-    }
-    h1 { color: #333; }
-    button {
-      background-color: #4CAF50;
-      color: white;
-      padding: 12px 25px;
-      margin: 5px;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    button:hover { background-color: #45a049; }
-  </style>
+  <title>Autowala Music Player</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>🎶 My Playlist</h1>
-  <audio id="player" controls></audio>
-  <br><br>
-  <button onclick="prevSong()">⏮ Previous</button>
-  <button onclick="playSong()">▶ Play</button>
-  <button onclick="pauseSong()">⏸ Pause</button>
-  <button onclick="nextSong()">⏭ Next</button>
+  <div class="header">
+    <div id="clock"></div>
+    <div id="user">👤 User: Guest</div>
+  </div>
 
-  <script>
-    // List of songs (use raw GitHub links or local folder paths)
-    const songs = [
-      "Kyu Roye Har Baat Me Bandeya-Downringtone.com.mp3",
-      "Song2.mp3",
-      "Song3.mp3",
-      "Song4.mp3",
-      "Song5.mp3",
-      "Song6.mp3",
-      "Song7.mp3",
-      "Song8.mp3",
-      "Song9.mp3",
-      "Song10.mp3"
-    ];
+  <div class="player">
+    <img id="cover" src="assets/cover.png" alt="Album Art">
+    <h2 id="songTitle">Now Playing: Cyclone</h2>
+    <audio id="player"></audio>
+    <div class="controls">
+      <button onclick="prevSong()">⏮ Prev</button>
+      <button onclick="playSong()">▶ Play</button>
+      <button onclick="pauseSong()">⏸ Pause</button>
+      <button onclick="nextSong()">⏭ Next</button>
+    </div>
+  </div>
 
-    let currentIndex = 0;
-    const player = document.getElementById("player");
-
-    // Load first song
-    player.src = songs[currentIndex];
-
-    function playSong() {
-      player.play();
-    }
-
-    function pauseSong() {
-      player.pause();
-    }
-
-    function nextSong() {
-      currentIndex = (currentIndex + 1) % songs.length;
-      player.src = songs[currentIndex];
-      player.play();
-    }
-
-    function prevSong() {
-      currentIndex = (currentIndex - 1 + songs.length) % songs.length;
-      player.src = songs[currentIndex];
-      player.play();
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
