@@ -1,7 +1,7 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   color: white;
   text-align: center;
 }
@@ -18,11 +18,12 @@ body {
 }
 
 #cover {
-  width: 200px;
-  height: 200px;
+  width: 220px;
+  height: 220px;
   border-radius: 50%;
-  animation: spin 6s linear infinite;
+  animation: spin 8s linear infinite;
   margin-bottom: 20px;
+  border: 5px solid #fff;
 }
 
 @keyframes spin {
@@ -39,8 +40,10 @@ body {
   border-radius: 8px;
   cursor: pointer;
   color: white;
+  transition: 0.3s;
 }
 
 .controls button:hover {
   background: #45a049;
+  transform: scale(1.1);
 }
