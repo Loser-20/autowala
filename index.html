@@ -1,488 +1,187 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="mr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Autowala FM — मीटर डाउन, गाना ऑन | Non-stop Auto Songs</title>
-<meta name="description" content="Non-stop desi party anthems, the kind every autowala blasts at a red light. Streamed live off YouTube.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ऑटोवाला रेडिओ · Autowala Radio</title>
+<meta name="description" content="Non-stop desi hits for every autowala. Live radio player streaming straight from the Songs folder.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛺</text></svg>">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Passion+One:wght@700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --yellow:#ffc400;
-    --yellow-deep:#e0a800;
-    --black:#141414;
-    --black-deep:#0a0a0a;
-    --chrome:#c9cdd1;
-    --green:#1e8e4c;
-    --red:#d13b2c;
-    --paper:#fbf6e9;
-    --paper-dim:#c9c2ac;
-    --shadow-hard: 0 20px 60px rgba(0,0,0,.55);
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    min-height:100vh;
-    background:
-      radial-gradient(ellipse at 50% -10%, rgba(255,196,0,.10), transparent 55%),
-      linear-gradient(180deg, var(--black-deep) 0%, var(--black) 55%, #050505 100%);
-    color:var(--paper);
-    font-family:'Inter',sans-serif;
-    overflow-x:hidden;
-    position:relative;
-  }
-  @media (prefers-reduced-motion: reduce){
-    *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
-  }
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Playfair+Display:wght@600;700;800&family=Poppins:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-  /* road stripes background texture */
-  .road{
-    position:fixed; left:0; right:0; bottom:0; height:38vh; z-index:0;
-    background:
-      repeating-linear-gradient(90deg, transparent 0 60px, var(--yellow) 60px 100px, transparent 100px 160px),
-      linear-gradient(180deg, #1c1c1c, #050505);
-    opacity:.14;
-  }
-
-  /* ---------- top bar ---------- */
-  .topbar{
-    position:fixed; top:0; left:0; right:0; z-index:40;
-    display:flex; justify-content:space-between; align-items:center;
-    padding:14px 20px;
-    background:linear-gradient(180deg, rgba(10,10,10,.92), rgba(10,10,10,0));
-    pointer-events:none;
-  }
-  .plaque{
-    pointer-events:auto;
-    background:linear-gradient(160deg, #1e1e1e, #0d0d0d);
-    border:1px solid rgba(255,196,0,.35);
-    border-radius:8px;
-    padding:8px 14px;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 6px 18px rgba(0,0,0,.4);
-  }
-  .plaque .label{
-    font-size:9px; letter-spacing:.14em; text-transform:uppercase;
-    color:var(--yellow); opacity:.85; display:block; margin-bottom:2px;
-  }
-  .plaque .value{ font-size:16px; color:var(--paper); letter-spacing:.03em; font-variant-numeric:tabular-nums; }
-  .plaque .value b{ color:var(--yellow); font-weight:800; }
-  .online-dot{
-    display:inline-block; width:7px; height:7px; border-radius:50%;
-    background:var(--green); margin-right:7px; box-shadow:0 0 8px var(--green);
-    animation:pulse 1.6s ease-in-out infinite;
-  }
-  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.35;} }
-
-  /* ---------- hero ---------- */
-  .hero{
-    position:relative; z-index:2;
-    min-height:100svh;
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    text-align:center;
-    padding:100px 18px 40px;
-  }
-  .sign{
-    font-family:'Passion One', sans-serif;
-    font-size:clamp(13px,2vw,15px);
-    letter-spacing:.3em; text-transform:uppercase;
-    color:var(--yellow);
-    margin:0 0 6px;
-  }
-  .sign .badge{
-    background:var(--red); color:#fff; padding:2px 10px; border-radius:4px;
-    letter-spacing:.15em; font-size:11px; margin-right:8px; vertical-align:2px;
-  }
-
-  /* ---------- 3D wheel ---------- */
-  .wheel-wrap{
-    position:relative; z-index:5;
-    width:min(220px, 44vw); aspect-ratio:1/1;
-    margin:8px 0 20px;
-    perspective:900px;
-  }
-  .wheel{
-    width:100%; height:100%; position:relative;
-    transform-style:preserve-3d;
-    animation:spin 9s linear infinite;
-  }
-  @keyframes spin{ from{transform:rotateY(0deg);} to{transform:rotateY(360deg);} }
-  .wheel-face{
-    position:absolute; inset:0; border-radius:50%;
-    backface-visibility:hidden;
-    display:flex; align-items:center; justify-content:center;
-    background:
-      radial-gradient(circle at 35% 30%, #333, #161616 55%, #000 100%);
-    box-shadow: var(--shadow-hard), inset 0 0 0 10px #0a0a0a, inset 0 0 0 12px rgba(255,196,0,.5);
-  }
-  .wheel-face.back{ transform:rotateY(180deg); }
-  .wheel-face svg{ width:76%; height:76%; }
-
-  h1.title{
-    font-family:'Passion One', sans-serif;
-    font-weight:900;
-    font-size:clamp(34px, 8vw, 62px);
-    margin:0 0 2px;
-    color:var(--yellow);
-    -webkit-text-stroke:2px #000;
-    text-shadow:4px 4px 0 rgba(0,0,0,.5);
-    letter-spacing:.01em;
-  }
-  .subtitle{
-    font-size:clamp(11px,1.6vw,13px);
-    letter-spacing:.22em; text-transform:uppercase;
-    color:var(--paper-dim);
-    margin:0 0 28px;
-  }
-  .subtitle b{ color:var(--red); }
-
-  /* ---------- player card ---------- */
-  .player-card{
-    position:relative; z-index:6;
-    width:min(520px, 92vw);
-    background:linear-gradient(160deg, #1c1c1cee, #0c0c0cee);
-    border:2px solid var(--yellow);
-    border-radius:14px;
-    padding:22px 22px 18px;
-    box-shadow:var(--shadow-hard);
-    transform-style:preserve-3d;
-    transition:transform .25s ease;
-  }
-  .meter-strip{
-    display:flex; justify-content:space-between; align-items:center;
-    font-family:'Passion One',sans-serif; font-size:11px; letter-spacing:.16em; text-transform:uppercase;
-    color:var(--yellow); margin-bottom:14px; opacity:.85;
-  }
-  .meter-strip .flag{
-    display:inline-flex; align-items:center; gap:6px;
-    background:var(--green); color:#fff; padding:3px 9px; border-radius:4px; font-size:10px;
-  }
-  .now-playing-row{ display:flex; align-items:center; gap:14px; margin-bottom:16px; }
-  .video-wrap{
-    position:relative; width:100%; aspect-ratio:16/9;
-    border-radius:10px; overflow:hidden; margin-bottom:16px;
-    border:2px solid var(--yellow); background:#000;
-  }
-  .video-wrap iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
-  .video-thumb{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
-  .video-play-overlay{
-    position:absolute; inset:0; width:100%; height:100%;
-    display:flex; align-items:center; justify-content:center;
-    background:rgba(10,10,10,.35); border:none; cursor:pointer; padding:0;
-  }
-  .video-play-overlay svg{
-    width:56px; height:56px; fill:#141414;
-    background:linear-gradient(160deg,var(--yellow),var(--yellow-deep));
-    border-radius:50%; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.5);
-  }
-  .video-wrap.playing .video-thumb,
-  .video-wrap.playing .video-play-overlay{ display:none; }
-  .np-text{ min-width:0; text-align:left; }
-  .np-eyebrow{ font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--red); margin-bottom:3px; font-weight:700; }
-  .np-title{ font-family:'Passion One',sans-serif; font-size:20px; color:var(--paper); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .np-artist{ font-size:12px; color:var(--paper-dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-
-  .controls{ display:flex; align-items:center; justify-content:center; gap:18px; margin-bottom:6px; flex-wrap:wrap; }
-  .ctrl-btn{
-    background:linear-gradient(160deg,#2a2a2a,#111);
-    border:1px solid rgba(255,196,0,.4);
-    color:var(--paper);
-    width:46px; height:46px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    cursor:pointer; transition:transform .15s ease, box-shadow .15s ease;
-    box-shadow:0 6px 14px rgba(0,0,0,.4);
-  }
-  .ctrl-btn:hover{ transform:translateY(-2px); box-shadow:0 10px 20px rgba(0,0,0,.5); }
-  .ctrl-btn:active{ transform:translateY(0); }
-  .ctrl-btn svg{ width:18px; height:18px; fill:var(--yellow); }
-  .ctrl-btn.main{ width:60px; height:60px; background:linear-gradient(160deg,var(--yellow),var(--yellow-deep)); border-color:#000; }
-  .ctrl-btn.main svg{ width:24px; height:24px; fill:#141414; }
-  .ctrl-btn.horn{ background:linear-gradient(160deg,var(--red),#8f2519); border-color:#000; }
-  .ctrl-btn.horn svg{ fill:#fff; }
-
-  /* ---------- start overlay ---------- */
-  .start-overlay{
-    position:fixed; inset:0; z-index:100;
-    background:radial-gradient(ellipse at 50% 40%, #1c1c1c, #050505 75%);
-    display:flex; align-items:center; justify-content:center; flex-direction:column; gap:18px;
-    text-align:center; padding:30px;
-  }
-  .start-overlay h2{ font-family:'Passion One',sans-serif; font-size:clamp(26px,5vw,38px); margin:0; color:var(--yellow); }
-  .start-overlay p{ font-size:13px; color:var(--paper-dim); max-width:360px; margin:0; }
-  .enter-btn{
-    font-family:'Passion One',sans-serif; letter-spacing:.1em; text-transform:uppercase;
-    font-size:16px; font-weight:700; color:#141414;
-    background:linear-gradient(160deg,var(--yellow),var(--yellow-deep));
-    border:2px solid #000; padding:15px 34px; border-radius:40px; cursor:pointer;
-    box-shadow:0 10px 30px rgba(255,196,0,.3);
-    transition:transform .15s ease;
-  }
-  .enter-btn:hover{ transform:scale(1.04); }
-  .start-overlay.hidden{ display:none; }
-
-  /* ---------- playlist ---------- */
-  .playlist-section{ position:relative; z-index:3; max-width:640px; margin:0 auto; padding:20px 18px 90px; }
-  .section-heading{
-    font-family:'Passion One',sans-serif; text-transform:uppercase; letter-spacing:.18em; font-size:13px;
-    color:var(--yellow); text-align:center; margin-bottom:18px;
-  }
-  .track-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px; }
-  .track-item{
-    border-radius:8px;
-    border:1px solid transparent;
-    transition:background .15s ease, border-color .15s ease;
-  }
-  .track-item:hover{ background:rgba(255,196,0,.08); }
-  .track-item.active{ background:rgba(255,196,0,.14); border-color:rgba(255,196,0,.4); }
-  .track-link{
-    display:flex; align-items:center; gap:12px;
-    padding:9px 12px; cursor:pointer;
-  }
-  .track-num{ width:20px; text-align:center; font-size:11px; color:var(--paper-dim); font-variant-numeric:tabular-nums; flex:none; }
-  .track-item.active .track-num{ color:var(--yellow); }
-  .track-thumb{ width:38px; height:38px; border-radius:6px; object-fit:cover; flex:none; background:#000; }
-  .track-info{ min-width:0; flex:1; text-align:left; }
-  .track-title{ font-family:'Passion One',sans-serif; font-size:15px; color:var(--paper); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .track-artist{ font-size:11px; color:var(--paper-dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .track-eq{ width:16px; flex:none; display:none; }
-  .track-item.active .track-eq{ display:block; }
-
-  footer{ position:relative; z-index:3; text-align:center; padding:20px 18px 34px; font-size:11px; color:var(--paper-dim); }
-  footer a{ color:var(--yellow); text-decoration:none; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="road"></div>
+<div class="road-glow" aria-hidden="true"></div>
 
-<div class="topbar">
-  <div class="plaque">
-    <span class="label">IST टाइम</span>
-    <span class="value" id="ist-clock">--:--:--</span>
-  </div>
-  <div class="plaque">
-    <span class="label">सीट में बैठे</span>
-    <span class="value"><span class="online-dot"></span><b id="online-count">—</b> सवारी</span>
-  </div>
-</div>
-
-<div class="start-overlay" id="start-overlay">
-  <h2>मीटर डाउन करो</h2>
-  <p>Autowala FM — non-stop Bollywood party anthems, playing right here on the page. Tap below to start the ride.</p>
-  <button class="enter-btn" id="enter-btn">चलो निकलते हैं ▸</button>
-</div>
-
-<section class="hero">
-  <p class="sign"><span class="badge">Non-Stop</span>Autowala FM</p>
-
-  <div class="wheel-wrap">
-    <div class="wheel" id="wheel">
-      <div class="wheel-face front">
-        <svg viewBox="0 0 100 100"><g fill="none" stroke="#ffc400" stroke-width="3">
-          <circle cx="50" cy="50" r="34"/>
-          <circle cx="50" cy="50" r="7" fill="#ffc400" stroke="none"/>
-          <path d="M50 16 L50 34 M84 50 L66 50 M50 84 L50 66 M16 50 L34 50 M73.7 26.3 L61 39 M73.7 73.7 L61 61 M26.3 73.7 L39 61 M26.3 26.3 L39 39" stroke-linecap="round"/>
-        </g></svg>
-      </div>
-      <div class="wheel-face back">
-        <svg viewBox="0 0 100 100"><g fill="none" stroke="#ffc400" stroke-width="3">
-          <circle cx="50" cy="50" r="34"/>
-          <path d="M32 62 L32 40 Q32 30 42 30 L58 30 Q68 30 68 40 L68 46 Q68 54 58 54 L40 54" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="50" cy="50" r="4" fill="#ffc400" stroke="none"/>
-        </g></svg>
-      </div>
-    </div>
+<header class="topbar">
+  <div class="chip chip--clock" id="clockChip">
+    <span class="chip__eyebrow">IST</span>
+    <span class="chip__value mono" id="clockValue">--:--:--</span>
   </div>
 
-  <h1 class="title">AUTOWALA FM</h1>
-  <p class="subtitle">Sharing the ride, not the fare · <b>Meter Down</b></p>
+  <div class="chip chip--live" id="liveChip">
+    <span class="chip__eyebrow">मीटर ऑन</span>
+    <span class="chip__value">
+      <i class="dot" aria-hidden="true"></i>
+      <span class="mono" id="listenerCount">0</span> ड्रायव्हर्स
+    </span>
+  </div>
+</header>
 
-  <div class="player-card" id="player-card">
-    <div class="meter-strip">
-      <span>Fare: ₹0.00 / vibe</span>
-      <span class="flag">● For Hire</span>
+<main class="stage">
+
+  <div class="badge" role="img" aria-label="Autowala Radio meter badge">
+    <svg viewBox="0 0 220 220" class="badge__dial" aria-hidden="true">
+      <defs>
+        <radialGradient id="dialGold" cx="35%" cy="30%" r="75%">
+          <stop offset="0%" stop-color="#fbe7ad"/>
+          <stop offset="45%" stop-color="#e8b04b"/>
+          <stop offset="100%" stop-color="#a86f22"/>
+        </radialGradient>
+      </defs>
+      <circle cx="110" cy="110" r="104" fill="url(#dialGold)"/>
+      <circle cx="110" cy="110" r="104" fill="none" stroke="#5c3b16" stroke-width="2" opacity="0.35"/>
+      <g class="dial__ticks" stroke="#5c3b16" stroke-width="2.4" opacity="0.55">
+        <!-- 24 tick marks like a fare meter dial -->
+      </g>
+      <circle cx="110" cy="110" r="78" fill="none" stroke="#5c3b16" stroke-width="1.5" opacity="0.3"/>
+    </svg>
+
+    <svg viewBox="0 0 100 100" class="badge__icon" aria-hidden="true">
+      <!-- simple auto-rickshaw silhouette -->
+      <g fill="#2a1c0f">
+        <path d="M22 62 C22 50 30 40 42 40 L60 40 C70 40 77 46 80 55 L86 62 L86 70 L18 70 Z"/>
+        <path d="M60 40 L64 24 L70 24 L72 40 Z"/>
+        <path d="M14 62 L22 62 L22 70 L14 70 Z"/>
+        <circle cx="30" cy="74" r="8"/>
+        <circle cx="72" cy="74" r="8"/>
+        <circle cx="30" cy="74" r="3" fill="#e8b04b"/>
+        <circle cx="72" cy="74" r="3" fill="#e8b04b"/>
+      </g>
+    </svg>
+  </div>
+
+  <h1 class="title">
+    <span class="title__mr">ऑटोवाला रेडिओ</span>
+    <span class="title__dot">·</span>
+    <span class="title__en">Autowala Radio</span>
+  </h1>
+  <p class="subtitle">NON&#8209;STOP SEAT&#8209;BELT&#8209;OFF HITS</p>
+
+  <section class="player" aria-label="Music player">
+    <div class="player__nowplaying">
+      <span class="eyebrow" id="statusLabel">आत्ता वाजतंय · NOW PLAYING</span>
     </div>
-    <div class="now-playing-row">
-      <div class="np-text" style="text-align:center; width:100%;">
-        <div class="np-eyebrow">अभी बज रहा है</div>
-        <div class="np-title" id="np-title">—</div>
-        <div class="np-artist" id="np-artist">—</div>
+
+    <div class="player__body">
+      <div class="cover" id="cover" aria-hidden="true">
+        <svg viewBox="0 0 60 60" class="cover__note">
+          <path d="M40 8 L40 34 A7 7 0 1 1 37 28 L37 13 L22 16 L22 40 A7 7 0 1 1 19 34 L19 11 Z" fill="currentColor"/>
+        </svg>
+      </div>
+
+      <div class="meta">
+        <h2 class="song-title" id="songTitle">स्टेशन ट्यून होत आहे…</h2>
+        <p class="song-artist" id="songArtist">कृपया थांबा</p>
       </div>
     </div>
-    <div class="video-wrap" id="video-wrap">
-      <img class="video-thumb" id="video-thumb" src="" alt="">
-      <button class="video-play-overlay" id="video-play-overlay" aria-label="Play">
-        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-      </button>
+
+    <div class="progress">
+      <input type="range" id="seek" class="seek" min="0" max="100" value="0" step="0.1" aria-label="Seek">
+      <div class="progress__fill" id="progressFill"></div>
     </div>
+
+    <div class="times">
+      <span class="mono" id="timeCurrent">0:00</span>
+      <span class="mono" id="timeTotal">0:00</span>
+    </div>
+
     <div class="controls">
-      <button class="ctrl-btn" id="prev-btn" title="पिछला · Previous" aria-label="Previous track">
-        <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zM20 6l-10 6 10 6z"/></svg>
+      <button class="ctrl ctrl--side" id="prevBtn" aria-label="Previous song">
+        <svg viewBox="0 0 24 24"><path d="M6 5h2v14H6zM19 5L9 12l10 7z"/></svg>
       </button>
-      <button class="ctrl-btn horn" id="horn-btn" title="Horn" aria-label="Honk horn">
-        <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7v4l-2 4v1h18v-1l-2-4V9a7 7 0 0 0-7-7z"/></svg>
+      <button class="ctrl ctrl--main" id="playBtn" aria-label="Play">
+        <svg viewBox="0 0 24 24" id="playIcon"><path d="M8 5v14l11-7z"/></svg>
       </button>
-      <button class="ctrl-btn" id="next-btn" title="अगला · Next" aria-label="Next track">
-        <svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM4 6l10 6-10 6z"/></svg>
+      <button class="ctrl ctrl--side" id="nextBtn" aria-label="Next song">
+        <svg viewBox="0 0 24 24"><path d="M16 5h2v14h-2zM5 5l10 7-10 7z"/></svg>
       </button>
     </div>
-  </div>
-</section>
 
-<section class="playlist-section">
-  <div class="section-heading">पूरी प्लेलिस्ट · Full Playlist</div>
-  <ul class="track-list" id="track-list"></ul>
-</section>
+    <div class="subcontrols">
+      <button class="mini-toggle" id="shuffleBtn" aria-pressed="false" title="Shuffle">
+        <svg viewBox="0 0 24 24"><path d="M17 3l4 4-4 4V8h-3.6a3 3 0 0 0-2.5 1.3L6.9 16H3v-2h2.9l4-6.7A5 5 0 0 1 14 5h3V3zM17 21l4-4-4-4v3h-3a5 5 0 0 1-4.1-2.2L6.9 8H3V6h2.9l3.9 6.8A3 3 0 0 0 12.4 14H17v3z"/></svg>
+        <span>शफल</span>
+      </button>
+      <button class="mini-toggle" id="repeatBtn" aria-pressed="true" title="Repeat">
+        <svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2z"/></svg>
+        <span>रिपीट</span>
+      </button>
+      <button class="mini-toggle" id="playlistBtn" aria-pressed="false" title="Playlist">
+        <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h10v2H4z"/></svg>
+        <span>यादी</span>
+      </button>
+    </div>
+  </section>
 
-<footer>
-  Streamed live from YouTube · Built in the spirit of saloon.wtf &amp; hornokplease.xyz ·
-  <a href="https://music.youtube.com" target="_blank" rel="noopener">Open on YouTube Music</a>
+  <section class="playlist" id="playlistPanel" hidden>
+    <div class="playlist__head">
+      <h3>गाड्यांची यादी · Playlist</h3>
+      <span class="mono" id="songCount">0 गाणी</span>
+    </div>
+    <ul class="playlist__list" id="playlistList"></ul>
+  </section>
+
+  <p class="status-line" id="statusLine" role="status" aria-live="polite"></p>
+
+</main>
+
+<footer class="skyline" aria-hidden="true">
+  <svg viewBox="0 0 1600 200" preserveAspectRatio="none" class="skyline__svg">
+    <rect x="0" y="150" width="1600" height="50" fill="#120b06"/>
+    <g fill="#1c1209" opacity="0.9">
+      <!-- repeated rickshaw silhouettes along the road -->
+      <g transform="translate(60,120) scale(1.1)">
+        <path d="M0 40 C0 28 8 18 20 18 L40 18 C50 18 57 24 60 33 L66 40 L66 48 L-2 48 Z"/>
+        <path d="M40 18 L44 2 L50 2 L52 18 Z"/>
+        <circle cx="12" cy="52" r="7"/><circle cx="52" cy="52" r="7"/>
+      </g>
+      <g transform="translate(260,128) scale(0.9)">
+        <path d="M0 40 C0 28 8 18 20 18 L40 18 C50 18 57 24 60 33 L66 40 L66 48 L-2 48 Z"/>
+        <path d="M40 18 L44 2 L50 2 L52 18 Z"/>
+        <circle cx="12" cy="52" r="7"/><circle cx="52" cy="52" r="7"/>
+      </g>
+      <g transform="translate(520,118) scale(1.25)">
+        <path d="M0 40 C0 28 8 18 20 18 L40 18 C50 18 57 24 60 33 L66 40 L66 48 L-2 48 Z"/>
+        <path d="M40 18 L44 2 L50 2 L52 18 Z"/>
+        <circle cx="12" cy="52" r="7"/><circle cx="52" cy="52" r="7"/>
+      </g>
+      <g transform="translate(860,126) scale(1)">
+        <path d="M0 40 C0 28 8 18 20 18 L40 18 C50 18 57 24 60 33 L66 40 L66 48 L-2 48 Z"/>
+        <path d="M40 18 L44 2 L50 2 L52 18 Z"/>
+        <circle cx="12" cy="52" r="7"/><circle cx="52" cy="52" r="7"/>
+      </g>
+      <g transform="translate(1120,120) scale(1.15)">
+        <path d="M0 40 C0 28 8 18 20 18 L40 18 C50 18 57 24 60 33 L66 40 L66 48 L-2 48 Z"/>
+        <path d="M40 18 L44 2 L50 2 L52 18 Z"/>
+        <circle cx="12" cy="52" r="7"/><circle cx="52" cy="52" r="7"/>
+      </g>
+      <g transform="translate(1400,128) scale(0.95)">
+        <path d="M0 40 C0 28 8 18 20 18 L40 18 C50 18 57 24 60 33 L66 40 L66 48 L-2 48 Z"/>
+        <path d="M40 18 L44 2 L50 2 L52 18 Z"/>
+        <circle cx="12" cy="52" r="7"/><circle cx="52" cy="52" r="7"/>
+      </g>
+    </g>
+    <rect x="0" y="176" width="1600" height="4" fill="#e8b04b" opacity="0.5"/>
+  </svg>
 </footer>
 
-<script>
-/* ============ PLAYLIST — real YouTube video IDs (verified) ============
-   Add up to 30 entries: {id: 'YOUTUBE_VIDEO_ID', title: '...', artist: '...'}
-   Played in-page via the hidden YouTube iframe below — nothing opens the app. */
-const PLAYLIST = [
-  { id: 'udra3Mfw2oo', title: 'London Thumakda', artist: 'Queen · Labh Janjua, Neha Kakkar' },
-  { id: 'c6L4NtIfcN0', title: 'Kala Chashma', artist: 'Baar Baar Dekho · Badshah, Neha Kakkar' },
-  { id: '3X7x4Ye-tqo', title: 'Nagada Sang Dhol', artist: 'Ram-Leela · Shreya Ghoshal, Osman Mir' },
-  { id: 'NTHz9ephYTw', title: 'Kar Gayi Chull', artist: 'Kapoor & Sons · Badshah, Fazilpuria' },
-  { id: '9MX-QejdVaQ', title: 'Chaiyya Chaiyya', artist: 'Dil Se · Sukhwinder Singh, A.R. Rahman' },
-  { id: 'BzJdJCbOyys', title: 'Waat Mazhi Baghtoy Rikshawala', artist: 'Reshma Sonawane · Marathi' }
-];
+<audio id="audio" preload="metadata"></audio>
 
-let current = 0;
-
-function thumb(id){ return 'https://img.youtube.com/vi/' + id + '/hqdefault.jpg'; }
-function embedUrl(id){ return 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0'; }
-
-/* ---------- render playlist ---------- */
-const listEl = document.getElementById('track-list');
-PLAYLIST.forEach((t, i) => {
-  const li = document.createElement('li');
-  li.className = 'track-item';
-  li.dataset.index = i;
-  li.innerHTML = `
-    <span class="track-link">
-      <span class="track-num">${String(i+1).padStart(2,'0')}</span>
-      <img class="track-thumb" src="${thumb(t.id)}" alt="">
-      <span class="track-info">
-        <span class="track-title">${t.title}</span><br>
-        <span class="track-artist">${t.artist}</span>
-      </span>
-      <svg class="track-eq" viewBox="0 0 16 16"><rect x="1" y="6" width="3" height="8" fill="#ffc400"/><rect x="6.5" y="2" width="3" height="12" fill="#ffc400"/><rect x="12" y="8" width="3" height="6" fill="#ffc400"/></svg>
-    </span>
-  `;
-  li.addEventListener('click', () => loadTrack(i));
-  listEl.appendChild(li);
-});
-
-function updateActiveRow(){
-  document.querySelectorAll('.track-item').forEach(el=>{
-    el.classList.toggle('active', Number(el.dataset.index) === current);
-  });
-}
-
-const videoWrap = document.getElementById('video-wrap');
-const videoThumb = document.getElementById('video-thumb');
-
-function updateNowPlaying(){
-  const t = PLAYLIST[current];
-  document.getElementById('np-title').textContent = t.title;
-  document.getElementById('np-artist').textContent = t.artist;
-  videoThumb.src = thumb(t.id);
-  updateActiveRow();
-}
-
-/* loadTrack: swaps the visible iframe's src (or shows a thumbnail+play
-   button before the first interaction). No JS API, no postMessage —
-   just a plain <iframe src="...">, which is why this works from a
-   double-clicked file with zero server and zero dependencies. */
-let started = false;
-function loadTrack(i){
-  current = (i + PLAYLIST.length) % PLAYLIST.length;
-  updateNowPlaying();
-  if(started) mountIframe();
-}
-function mountIframe(){
-  started = true;
-  videoWrap.classList.add('playing');
-  videoWrap.innerHTML = `<iframe src="${embedUrl(PLAYLIST[current].id)}"
-    allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
-}
-function nextTrack(){ loadTrack(current + 1); }
-function prevTrack(){ loadTrack(current - 1); }
-
-document.getElementById('next-btn').addEventListener('click', nextTrack);
-document.getElementById('prev-btn').addEventListener('click', prevTrack);
-document.getElementById('video-play-overlay').addEventListener('click', mountIframe);
-
-/* ---------- horn button (synthesized beep, no audio file) ---------- */
-document.getElementById('horn-btn').addEventListener('click', () => {
-  try{
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    [0, 0.18].forEach((delay) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'square';
-      osc.frequency.value = 340;
-      gain.gain.setValueAtTime(0.0001, ctx.currentTime + delay);
-      gain.gain.exponentialRampToValueAtTime(0.15, ctx.currentTime + delay + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + delay + 0.15);
-      osc.connect(gain).connect(ctx.destination);
-      osc.start(ctx.currentTime + delay);
-      osc.stop(ctx.currentTime + delay + 0.16);
-    });
-  }catch(e){}
-});
-
-/* ---------- start overlay ---------- */
-document.getElementById('enter-btn').addEventListener('click', () => {
-  document.getElementById('start-overlay').classList.add('hidden');
-  mountIframe();
-});
-updateNowPlaying();
-
-/* ---------- IST clock ---------- */
-function tickClock(){
-  const now = new Date();
-  const ist = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
-  const h = String(ist.getHours()).padStart(2,'0');
-  const m = String(ist.getMinutes()).padStart(2,'0');
-  const s = String(ist.getSeconds()).padStart(2,'0');
-  document.getElementById('ist-clock').textContent = `${h}:${m}:${s}`;
-}
-tickClock();
-setInterval(tickClock, 1000);
-
-/* ---------- live-looking passenger counter ---------- */
-let onlineBase = 50 + Math.floor(Math.random()*40);
-function tickOnline(){
-  onlineBase += Math.floor(Math.random()*7) - 3;
-  onlineBase = Math.max(9, Math.min(130, onlineBase));
-  document.getElementById('online-count').textContent = onlineBase;
-}
-tickOnline();
-setInterval(tickOnline, 2500);
-
-/* ---------- 3D tilt on mouse / device tilt ---------- */
-const cardEl = document.getElementById('player-card');
-function applyTilt(nx, ny){
-  cardEl.style.transform = `rotateY(${nx*4}deg) rotateX(${-ny*4}deg)`;
-}
-window.addEventListener('mousemove', (e) => {
-  const nx = (e.clientX / window.innerWidth - 0.5) * 2;
-  const ny = (e.clientY / window.innerHeight - 0.5) * 2;
-  applyTilt(nx, ny);
-});
-window.addEventListener('deviceorientation', (e) => {
-  if(e.gamma == null) return;
-  const nx = Math.max(-1, Math.min(1, e.gamma/30));
-  const ny = Math.max(-1, Math.min(1, (e.beta-45)/30));
-  applyTilt(nx, ny);
-});
-</script>
+<script src="script.js" defer></script>
 </body>
 </html>
